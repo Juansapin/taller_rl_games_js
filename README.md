@@ -1,4 +1,4 @@
-![Lint](https://github.com/emiliomunozai/rl_games/actions/workflows/ci.yml/badge.svg?branch=main&event=push&job=Lint)
+![CI](https://github.com/emiliomunozai/rl_games/actions/workflows/ci.yml/badge.svg?branch=main)
 
 A hands-on repo for understanding how Reinforcement Learning works.
 Train, inspect, and visualise RL agents on [LunarLander-v3](https://gymnasium.farama.org/environments/box2d/lunar_lander/) (or any other Gymnasium environment).
