@@ -1,3 +1,6 @@
+![Build](https://github.com/emiliomunozai/rl_games/actions/workflows/build.yml/badge.svg)
+![Tests](https://github.com/emiliomunozai/rl_games/actions/workflows/test.yml/badge.svg)
+
 # rl_games
 
 A hands-on repo for understanding how Reinforcement Learning works.
