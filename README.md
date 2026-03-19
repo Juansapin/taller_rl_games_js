@@ -96,32 +96,19 @@ Para lograr que el agente aprenda eficientemente en un entorno continuo como Lun
 A continuación, mostramos los valores utilizados en el constructor del `QLearningAgent` (visible en `src/rl_games/agents/qlearning.py`):
 
 
-# Extracto del código en src/rl_games/agents/qlearning.py
+### Configuración y Estrategia de Entrenamiento (Q-Learning)
+Para que el agente logre aterrizar con éxito en un entorno de control continuo como LunarLander-v3, se definieron los siguientes hiperparámetros. Cada uno responde a una necesidad específica del aprendizaje:
 
-n_bins: int = 14,          # ALTA GRANULARIDAD.
-                           # Al discretizar 8 dimensiones continuas, 
-                           # necesitamos suficiente resolución para no
-                           # perder información vital de la posición/velocidad.
+n_bins = 14 (Alta Granularidad): Dado que el entorno nos entrega 8 dimensiones continuas (posiciones, ángulos, velocidades), necesitamos "partir" el espacio en trozos pequeños. Con 14 bins, aseguramos que el agente perciba cambios sutiles en la inclinación y velocidad, vitales para no estrellarse.
 
-lr: float = 0.1,           # AGRESIVO AL INICIO.
-                           # Permitimos que la Tabla Q cambie 
-                           # significativamente al principio para descubrir
-                           # estrategias rápidamente.
+lr = 0.1 (Aprendizaje Agresivo): Al inicio, permitimos que la Tabla Q se actualice con fuerza. Esto acelera el descubrimiento de estrategias básicas en las primeras milésimas de episodios.
 
-lr_min: float = 0.01,      # FRENO AL MADURAR.
-                           # No queremos que el agente "olvide" lo que ya 
-                           # aprendió al final. El LR decae hasta este mínimo.
+lr_min = 0.01 y lr_decay = 0.9999: Implementamos un sistema de enfriamiento para el Learning Rate. A medida que el agente madura, bajamos la velocidad de actualización para "estabilizar" el conocimiento y evitar que nuevas experiencias aleatorias arruinen lo que ya funciona.
 
-lr_decay: float = 0.9999,  # Tasa de decaimiento del Learning Rate.
-
-epsilon_decay: float = 0.9995,  # DECAIMIENTO MÁS RÁPIDO DE EXPLORACIÓN.
-                                # LunarLander requiere precisión rápido.
-                                # Decaemos epsilon agresivamente para que el
-                                # agente pase pronto de explorar (moverse al azar)
-                                # a explotar (apuntar al aterrizaje).
+epsilon_decay = 0.9995 (Transición Rápida a Explotación): LunarLander es un entorno imperdonable. Configuramos un decaimiento de épsilon relativamente rápido para que el agente deje de "dar vueltas al azar" pronto y empiece a perfeccionar su puntería sobre la plataforma de aterrizaje.
 
 
-Resultados y Ejecución
+### Resultados y Ejecución
 Al entrenar al agente con esta configuración, logramos resultados sólidos.
 
 Aquí puedes ver la salida de la terminal al renderizar episodios cargando los pesos del agente entrenado:
