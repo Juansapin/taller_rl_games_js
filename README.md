@@ -256,3 +256,39 @@ Y así es como se ve el agente ejecutando una política exitosa en la ventana de
 <p align="center">
 <img src="assets/lander_success.png" width="80%" alt="LunarLander aterrizando suavemente">
 </p>
+
+## Escalando a Redes Neuronales: DQN (Deep Q-Network)
+
+Cuando el espacio de estados es continuo y complejo, la tabla se queda corta. Aquí es donde entra **DQN**, sustituyendo la tabla por una Red Neuronal que actúa como el "cerebro" del agente.
+
+### El Ciclo de Entrenamiento de DQN
+
+En este diagrama detallamos el flujo de trabajo del agente. A diferencia de Q-Learning básico, aquí introducimos conceptos avanzados como el **Replay Buffer** (para aprender de experiencias pasadas y romper la correlación) y la **Target Network** (para dar estabilidad al entrenamiento).
+
+<p align="center">
+  <img src="assets/dqn_diagram.png" width="80%" alt="Diagrama conceptual de DQN">
+</p>
+
+### Análisis de Hiperparámetros (DQNAgent)
+
+El éxito de una red neuronal depende de su arquitectura y de cómo gestionamos su memoria. Estos son los valores que permitieron "domar" al Lander:
+
+* **`hidden = 128`:** Utilizamos capas ocultas de 128 neuronas. Es la capacidad suficiente para procesar las 8 variables del estado sin sobreajustar (overfitting).
+* **`lr = 5e-4` (0.0005):** Un ritmo de aprendizaje más conservador que en Q-Learning. En redes neuronales, pasos muy grandes pueden desestabilizar el modelo completo.
+* **`batch_size = 64`:** Extraemos 64 experiencias al azar del buffer en cada paso para entrenar. Esto garantiza que el gradiente sea estable.
+* **`buffer_capacity = 100,000`:** Una "caja de experiencias" masiva. Guardamos los últimos 100 mil movimientos para que el agente pueda re-visitar lecciones antiguas.
+* **`target_update_freq = 10`:** Actualizamos la red "objetivo" cada 10 pasos. Esto evita que el agente persiga una meta que se mueve demasiado rápido (Moving Target Problem).
+
+### Resultados: Superando el umbral de los +300
+
+DQN no solo resuelve el entorno, sino que optimiza el aterrizaje de forma excepcional. En nuestras pruebas, el agente logró alcanzar puntuaciones de hasta **+307.34**, demostrando un control casi perfecto de los motores.
+
+<p align="center">
+  <img src="assets/dqn_terminal.png" width="70%" alt="Resultados DQN en terminal">
+</p>
+
+Como se observa en el renderizado, el agente mantiene una estabilidad total, centrando la nave perfectamente entre las banderas y minimizando el consumo de combustible.
+
+<p align="center">
+  <img src="assets/dqn_success.png" width="80%" alt="DQN Landing Success">
+</p>
