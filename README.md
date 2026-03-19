@@ -77,6 +77,48 @@ $$
 - $\alpha$ (learning rate) — how fast we update.
 - **$\varepsilon$-greedy** exploration — with probability $\varepsilon$ pick a random action, otherwise pick $\arg\max_a Q(s, a)$. $\varepsilon$ decays over time so the agent gradually shifts from exploring to exploiting.
 
+## Un caso práctico: LunarLander con Tabular Q-Learning
+
+A continuación se detalla cómo se configuró y ejecutó el agente `qlearning` para resolver el entorno de LunarLander-v3. Esta sección es clave para entender la transparencia que buscamos en este repositorio.
+
+### Visualizando el ciclo de aprendizaje
+
+El siguiente diagrama (hecho a mano) ilustra el flujo conceptual de cómo el agente `qlearning` interactúa con el entorno, observando el estado, tomando una acción basada en la **Tabla Q**, recibiendo la recompensa, y ejecutando la **Actualización** de la tabla.
+
+<p align="center">
+  <img src="assets/qlearning_diagram.png" width="80%" alt="Diagrama conceptual de Q-Learning">
+</p>
+
+### Configuración e Hiperparámetros (Config_Diary.py)
+
+Para lograr que el agente aprenda eficientemente en un entorno continuo como LunarLander (el cual discretizamos), se ajustaron cuidadosamente los hiperparámetros. No son valores aleatorios, sino decisiones basadas en la experimentación:
+
+A continuación, mostramos los valores utilizados en el constructor del `QLearningAgent` (visible en `src/rl_games/agents/qlearning.py`):
+
+```python
+# Extracto del código en src/rl_games/agents/qlearning.py
+
+n_bins: int = 14,          # ALTA GRANULARIDAD.
+                           # Al discretizar 8 dimensiones continuas, 
+                           # necesitamos suficiente resolución para no
+                           # perder información vital de la posición/velocidad.
+
+lr: float = 0.1,           # AGRESIVO AL INICIO.
+                           # Permitimos que la Tabla Q cambie 
+                           # significativamente al principio para descubrir
+                           # estrategias rápidamente.
+
+lr_min: float = 0.01,      # FRENO AL MADURAR.
+                           # No queremos que el agente "olvide" lo que ya 
+                           # aprendió al final. El LR decae hasta este mínimo.
+
+lr_decay: float = 0.9999,  # Tasa de decaimiento del Learning Rate.
+
+epsilon_decay: float = 0.9995,  # DECAIMIENTO MÁS RÁPIDO DE EXPLORACIÓN.
+                                # LunarLander requiere precisión rápido.
+                                # Decaemos epsilon agresivamente para que el
+                                # agente pase pronto de explorar (moverse al azar)
+                                # a explotar (apuntar al aterrizaje).
 > See `src/rl_games/agents/qlearning.py` for a complete tabular implementation.
 
 ### Deep Q-Network (DQN)
