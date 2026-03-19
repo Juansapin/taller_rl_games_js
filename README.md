@@ -231,13 +231,12 @@ A continuación, mostramos los valores utilizados en el constructor del `QLearni
 ### Configuración y Estrategia de Entrenamiento (Q-Learning)
 Para que el agente logre aterrizar con éxito en un entorno de control continuo como LunarLander-v3, se definieron los siguientes hiperparámetros. Cada uno responde a una necesidad específica del aprendizaje:
 
-n_bins = 14 (Alta Granularidad): Dado que el entorno nos entrega 8 dimensiones continuas (posiciones, ángulos, velocidades), necesitamos "partir" el espacio en trozos pequeños. Con 14 bins, aseguramos que el agente perciba cambios sutiles en la inclinación y velocidad, vitales para no estrellarse.
+* **`n_bins = 14` (Alta Granularidad):** Al discretizar 8 dimensiones continuas, necesitamos suficiente resolución. Con 14 bins por dimensión, aseguramos que el agente perciba cambios sutiles en inclinación y velocidad.
+* **`lr = 0.1` (Aprendizaje Agresivo):** Al inicio, permitimos que la Tabla Q se actualice con fuerza para acelerar el descubrimiento de estrategias básicas.
+* **`lr_min = 0.01` y `lr_decay = 0.9999`:** Implementamos un sistema de "enfriamiento" para estabilizar el conocimiento y evitar que experiencias aleatorias tardías arruinen la política aprendida.
+* **`epsilon_decay = 0.9995` (Transición a Explotación):** Configuramos un decaimiento rápido para que el agente deje de explorar al azar pronto y empiece a perfeccionar su puntería.
 
-lr = 0.1 (Aprendizaje Agresivo): Al inicio, permitimos que la Tabla Q se actualice con fuerza. Esto acelera el descubrimiento de estrategias básicas en las primeras milésimas de episodios.
-
-lr_min = 0.01 y lr_decay = 0.9999: Implementamos un sistema de enfriamiento para el Learning Rate. A medida que el agente madura, bajamos la velocidad de actualización para "estabilizar" el conocimiento y evitar que nuevas experiencias aleatorias arruinen lo que ya funciona.
-
-epsilon_decay = 0.9995 (Transición Rápida a Explotación): LunarLander es un entorno imperdonable. Configuramos un decaimiento de épsilon relativamente rápido para que el agente deje de "dar vueltas al azar" pronto y empiece a perfeccionar su puntería sobre la plataforma de aterrizaje.
+### Resultados Q-Learning
 
 
 ### Resultados y Ejecución
@@ -292,3 +291,11 @@ Como se observa en el renderizado, el agente mantiene una estabilidad total, cen
 <p align="center">
   <img src="assets/dqn_success.png" width="80%" alt="DQN Landing Success">
 </p>
+
+
+## Conclusión: El Salto de Tabular a Deep Learning
+
+Este repositorio permite comparar dos eras del Aprendizaje por Refuerzo:
+
+1. **Q-Learning (El fundamento):** Demuestra que con una discretización inteligente, una simple tabla puede aprender a pilotar una nave. Es ideal para entender la lógica de la recompensa.
+2. **DQN (La potencia):** Al usar redes neuronales, el agente desarrolla una comprensión fluida del entorno, logrando aterrizajes mucho más estables y puntuaciones superiores (rompiendo la barrera de los **+300**).
